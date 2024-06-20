@@ -1,0 +1,32 @@
+- hosts: webserver
+  become: true
+  tasks:
+    - name: Installera EPEL-release
+      yum:
+        name: epel-release
+        state: present
+
+    - name: Installera Node.js
+      yum:
+        name: nodejs
+        state: present
+
+    - name: Installera Git
+      yum:
+        name: git
+        state: present
+
+    - name: Klona applikationsrepot
+      git:
+        repo: 'https://gitlab.com/viktorsvensson/automation_express.git'
+        dest: /home/ec2-user/app
+
+    - name: Installera NPM-paket
+      command: npm install
+      args:
+        chdir: /home/ec2-user/app
+
+    - name: Starta applikationen
+      command: npm start
+      args:
+        chdir: /home/ec2-user/app
